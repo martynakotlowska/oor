@@ -1,0 +1,24 @@
+{
+  "name": "brainjs",
+  "version": "1.0.0",
+  "description": "brain js demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "brainjs",
+    "machine",
+    "learning",
+    "javascript",
+    "neural",
+    "networks",
+    "demo"
+  ],
+  "author": "alejandro garcia granado",
+  "license": "ISC",
+  "dependencies": {
+    "brain.js": "^1.4.8",
+    "node-modules": "^1.0.1"
+  }
+}
