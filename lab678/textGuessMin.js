@@ -4,7 +4,7 @@ const network = new brain.NeuralNetwork();
 
 const trainingData = [
     {
-        input: 'Ay pobre',
+        input: 'Ahahaha',
         output: { estela: 1 }
     },
     {
@@ -12,19 +12,19 @@ const trainingData = [
         output: { estela: 1 }
     },
     {
-        input: 'a ver si entiendes algo',
+        input: 'papappa',
         output: { estela: 1 }
     },
     {
-        input: 'si quieres te paso como lo tengo hecho yo',
+        input: 'rjrjrjr',
         output: { estela: 1 }
     },
     {
-        input: 'ya, pero eso en java no funciona asi',
+        input: 'yayayayaya',
         output: { estela: 1 }
     },
     {
-        input: 'hay que hacerlo pasico a paso',
+        input: 'sasasasa',
         output: { estela: 1 }
     },
     {
@@ -36,11 +36,11 @@ const trainingData = [
         output: { estela: 1 }
     },
     {
-        input: 'porque no entiendo la mitad de los metodos que has usado',
+        input: 'popopo',
         output: { estela: 1 }
     },
     {
-        input: 'no soy capaz de pasar tu código a java ni queriendo',
+        input: 'tralalala',
         output: { estela: 1 }
     },
     {
@@ -48,11 +48,11 @@ const trainingData = [
         output: { estela: 1 }
     },
     {
-        input: 'Por?',
+        input: '?',
         output: { alejandro: 1 }
     },
     {
-        input: 'push es para añadir un elemento nuevo al final de un array',
+        input: 'array',
         output: { alejandro: 1 }
     },
     {

@@ -1,0 +1,152 @@
+
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>lipstick_lab</title>
+  <style>
+	.articleImage {
+		width:180px;
+	}
+  
+	.ratingItem {
+		padding-bottom: 30px;
+	}
+  
+	.suggestedItems {
+		display: flex;
+		flex-wrap: wrap;
+		width:650px;
+	}
+  
+	.suggestionItem {
+		padding-right:15px;
+		padding-top: 30px;
+	}
+  </style>
+ </head>
+ <body onLoad="nextTry();">
+	<script src="https://unpkg.com/brain.js@1.1.2/browser.min.js"></script>
+	<script src="lipstick.js"></script>
+	<script>
+		const color_normalization_factor = 100;
+		const kind_normalization_factor = 10;
+		const price_normalization_factor = 100;	
+		
+		let trainingData = [
+			{ input: {color: color_red,  kind: kind_matte, price: 24.99 }, output: { wanted: 0 } }
+		];
+		let ratingItem;
+
+		function nextTry(rating){	
+			document.getElementById('result').innerHTML = '';
+
+            if(undefined !== ratingItem){
+                trainingData.push({ input: ratingItem.trainingInformation, output: { wanted: rating / 4 } });
+            }
+
+			const network = new brain.NeuralNetwork({
+				activation: 'sigmoid',
+				hiddenLayers: [4]
+			});
+			network.train(trainingData);
+
+			let suggestionItemsText = '';
+			let suggestionItems = [];
+			for(i=0;i<lipstick.length;i++){
+				let item = getNormalizedItemFromStock(i);
+				item.wanted = network.run(item.trainingInformation).wanted;
+				suggestionItems.push(item);
+			}
+			
+			suggestionItems.sort(function(a,b){
+				return b.wanted - a.wanted;
+			});
+			
+			for(i=0;i<suggestionItems.length;i++){
+				suggestionItem = suggestionItems[i];
+				suggestionItemsText += 
+					'<div class="suggestionItem">' + 
+						getFormattedItem(suggestionItem) + ' <br/> ' + 
+						'wanted: ' + Math.round(suggestionItem.wanted * 100) + '%'
+					+ '</div>';
+			}
+			
+			ratingItem = getNormalizedItemFromStock(Math.floor((Math.random() * lipstick.length - 1) + 1));			
+			document.getElementById('result').innerHTML += 
+				'<div class="ratingItem">' +
+					'Rate this:<br/>' + 
+					getFormattedItem(ratingItem) + '<br/>' +
+				'</div>' +
+				'Suggested items:<br/>' +
+				'<div class="suggestedItems">' + 
+					suggestionItemsText + 
+				'</div>';
+		}
+		
+		function getNormalizedItemFromStock(index){
+			const item = lipstick[index];
+			trainingInformation = item.trainingInformation;
+			return {
+				trainingInformation : {
+					color: trainingInformation.color / color_normalization_factor,
+					kind: trainingInformation.kind / kind_normalization_factor,
+					price: trainingInformation.price / price_normalization_factor
+				},
+				displayingInformation : item.displayingInformation
+			};
+		}
+		
+		function getFormattedItem(item){
+			const trainingInformation = item.trainingInformation;
+			const formattedItem = 
+				'<img class="articleImage" src="images/' + item.displayingInformation.imageFile + '"/><br/>' + 
+				'color: ' + getColorName(trainingInformation.color) + '<br/>' +
+				'kind: ' + getkindName(trainingInformation.kind) + '<br/>' +
+				'price: ' + ((Math.round((trainingInformation.price * price_normalization_factor) * 100)) / 100) + ' &euro;';
+			return formattedItem;
+		}
+		
+		function getColorName(color){
+			var id = color * color_normalization_factor;
+			var name = 
+				color_brown === id ? 'brown' :
+				color_lightbrown === id ? 'lightbrown' :
+				color_nude === id ? 'nude' :
+				color_darkviolet === id ? 'darkviolet' :
+				color_violet === id ? 'violet' :
+				color_lightviolet === id ? 'lightviolet' :
+				color_lightrose === id ? 'lightrose' :
+				color_darkrose === id ? 'darkrose' :
+				color_lightneonrose === id ? 'lightneonrose' :
+				color_neonrose === id ? 'neonrose' :
+				color_orange === id ? 'orange' :
+				color_lightred === id ? 'lightred' :
+				color_red === id ? 'red' :
+				color_darkred === id ? 'darkred' :
+				'';
+			return name;			
+		}
+
+		function getkindName(color){
+			var id = color * kind_normalization_factor;
+			var name = 
+				kind_shining === id ? 'shining' :
+				kind_matte === id ? 'matte' :
+				'';
+			return name;			
+		}
+	</script>
+	
+	<center>
+		<br/><br/><br/><br/><br/><br/><br/>
+		<input type="button" value="1" onClick="nextTry(0);"/> 
+		<input type="button" value="2" onClick="nextTry(1);"/> 
+		<input type="button" value="3" onClick="nextTry(2);"/> 
+		<input type="button" value="4" onClick="nextTry(3);"/> 
+		<input type="button" value="5" onClick="nextTry(4);"/> 		
+		<br/><br/>
+		<div id="result">
+		</div>
+	</center>
+ </body>
+</html>
